@@ -1,0 +1,29 @@
+From e886aa4d11951753c97eb031b4768b153b2bf912 Mon Sep 17 00:00:00 2001
+From: Daniel Azuma <dazuma@gmail.com>
+Date: Mon, 25 Apr 2011 18:41:14 -0700
+Subject: [PATCH] Fix invalid specs resulting from incorrect syck time parsing
+
+---
+ lib/rubygems/specification.rb |    6 ++++++
+ 1 files changed, 6 insertions(+), 0 deletions(-)
+
+diff --git a/lib/rubygems/specification.rb b/lib/rubygems/specification.rb
+index a310583..772882e 100644
+--- a/lib/rubygems/specification.rb
++++ b/lib/rubygems/specification.rb
+@@ -676,6 +676,12 @@ class Gem::Specification
+     vals.each do |ivar, val|
+       instance_variable_set "@#{ivar}", val
+     end
++    # Attempt to fix the date in case the YAML parser fails.
++    # This happens when the YAML is serialized by psych but read by syck,
++    # because the latter can't parse timestamps written by the former.
++    if String === @date && /\A(\d{4})-(\d{2})-(\d{2})/ =~ @date
++      @date = Time.utc($1.to_i, $2.to_i, $3.to_i)
++    end
+ 
+     @original_platform = @platform # for backwards compatibility
+     self.platform = Gem::Platform.new @platform
+-- 
+1.7.4.1
+
