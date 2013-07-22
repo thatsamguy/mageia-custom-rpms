@@ -24,3 +24,7 @@ However - we like dragons and in many cases use these rpms in production ourselv
 ```
     urpmi.addmedia --distrib rsync://cyprix.com.au/rpm/Mga3
 ```
+#### Mageia 1 (no longer supported upstream)
+```
+    urpmi.addmedia --distrib rsync://cyprix.com.au/rpm/Mga1
+```
