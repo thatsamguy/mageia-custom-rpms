@@ -1,0 +1,90 @@
+#!/bin/bash
+#
+# php-fpm	This shell script takes care of starting and stopping php-fpm.
+#
+# chkconfig: 345 91 9
+# description: The PHP FastCGI Process Manager daemon.
+# probe: false
+# processname: php-fpm
+# pidfile: /var/run/php-fpm/php-fpm.pid
+# config: /etc/php-fpm.conf
+# config: /etc/sysconfig/php-fpm
+
+### BEGIN INIT INFO
+# Provides: php-fpm
+# Required-Start: $syslog $network
+# Required-Stop: $syslog $network
+# Default-Start: 3 4 5
+# Default-Stop: 0 1 6
+# Short-Description: Starts the PHP FastCGI Process Manager daemon
+# Description: Starts the PHP FastCGI Process Manager daemon
+### END INIT INFO
+
+# Source function library.
+. /etc/rc.d/init.d/functions
+
+# Source networking configuration.
+. /etc/sysconfig/network
+
+# Check that networking is up.
+[ "${NETWORKING}" = "no" ] && exit 0
+
+[ -f /usr/sbin/php-fpm ] || exit 0
+
+[ -f /etc/sysconfig/php-fpm ] && . /etc/sysconfig/php-fpm
+
+# See how we were called.
+case "$1" in
+  start)
+	if [ -n "`/sbin/pidof php-fpm`" ]; then
+            echo -n "php-fpm: already running"
+	    RETVAL=$?
+	    echo
+	    exit $RETVAL
+        fi
+	echo -n "Starting php-fpm: "
+	daemon php-fpm ${PHP_FPM_OPTIONS}
+	RETVAL=$?
+	[ $RETVAL -eq 0 ] && success || failure
+	echo
+	[ $RETVAL -eq 0 ] && touch /var/lock/subsys/php-fpm
+	;;
+  stop)
+	echo -n "Stopping php-fpm: "
+	killproc php-fpm
+	pidfiles="`/sbin/pidof php-fpm`"
+	if ! [ -z $pidfiles ]; then
+   	    echo "php-fpm: is still running, trying harder: "
+   	    sleep 1
+   	    kill -9 $pidfiles
+	fi
+	RETVAL=$?
+	echo
+	[ $RETVAL -eq 0 ] && rm -f /var/lock/subsys/php-fpm
+	;;
+  status)
+	status php-fpm
+	RETVAL=$?
+	;;
+  condrestart)
+	if [ -f /var/lock/subsys/php-fpm ]; then
+	    $0 stop
+	    $0 start
+	    RETVAL=$?
+	fi
+	;;
+  restart|reload)
+	$0 stop
+	$0 start
+	RETVAL=$?
+	;;
+  flush-logs)
+	killproc php-fpm -USR1
+	RETVAL=$?
+	;;
+  *)
+	echo "Usage: php-fpm {start|stop|status|restart|condrestart|reload|flush-logs}"
+	exit 1
+esac
+
+exit $RETVAL

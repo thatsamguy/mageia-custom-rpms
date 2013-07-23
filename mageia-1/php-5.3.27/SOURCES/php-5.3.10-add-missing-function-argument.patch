@@ -1,0 +1,11 @@
+--- php-5.3.10/ext/standard/info.c.arg~	2012-03-23 20:29:22.303588285 +0100
++++ php-5.3.10/ext/standard/info.c	2012-03-23 20:29:25.266591372 +0100
+@@ -666,7 +666,7 @@ PHPAPI void php_print_info(int flag TSRM
+ 	}	
+ 
+ 	if (SG(request_info).request_uri) {
+-		req_uri = php_info_html_esc(SG(request_info).request_uri);
++		req_uri = php_info_html_esc(SG(request_info).request_uri TSRMLS_CC);
+ 	} else {
+ 		req_uri = NULL;
+ 	}

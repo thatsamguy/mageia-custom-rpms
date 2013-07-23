@@ -1,0 +1,24 @@
+diff -Naur php-5.3.9RC1/sapi/fpm/config.m4 php-5.3.9RC1.oden/sapi/fpm/config.m4
+--- php-5.3.9RC1/sapi/fpm/config.m4	2011-10-08 23:04:10.000000000 +0200
++++ php-5.3.9RC1.oden/sapi/fpm/config.m4	2011-11-06 13:58:35.365677130 +0100
+@@ -636,7 +636,7 @@
+         BUILD_FPM="\$(CC) \$(CFLAGS_CLEAN) \$(EXTRA_CFLAGS) \$(EXTRA_LDFLAGS_PROGRAM) \$(LDFLAGS) \$(NATIVE_RPATHS) \$(PHP_GLOBAL_OBJS:.lo=.o) \$(PHP_SAPI_OBJS:.lo=.o) \$(PHP_FRAMEWORKS) \$(EXTRA_LIBS) \$(SAPI_EXTRA_LIBS) \$(ZEND_EXTRA_LIBS) -o \$(SAPI_FPM_PATH)"
+       ;;
+       *)
+-        BUILD_FPM="\$(LIBTOOL) --mode=link \$(CC) -export-dynamic \$(CFLAGS_CLEAN) \$(EXTRA_CFLAGS) \$(EXTRA_LDFLAGS_PROGRAM) \$(LDFLAGS) \$(PHP_RPATHS) \$(PHP_GLOBAL_OBJS) \$(PHP_SAPI_OBJS) \$(EXTRA_LIBS) \$(SAPI_EXTRA_LIBS) \$(ZEND_EXTRA_LIBS) -o \$(SAPI_FPM_PATH)"
++        BUILD_FPM="\$(LIBTOOL) --mode=link \$(CC) -export-dynamic \$(CFLAGS_CLEAN) \$(EXTRA_CFLAGS) \$(EXTRA_LDFLAGS_PROGRAM) \$(LDFLAGS) \$(PHP_RPATHS) libphp\$(PHP_MAJOR_VERSION)_common.la \$(PHP_SAPI_OBJS) \$(EXTRA_LIBS) \$(SAPI_EXTRA_LIBS) \$(ZEND_EXTRA_LIBS) -o \$(SAPI_FPM_PATH)"
+       ;;
+   esac
+ 
+diff -Naur php-5.3.9RC1/sapi/fpm/Makefile.frag php-5.3.9RC1.oden/sapi/fpm/Makefile.frag
+--- php-5.3.9RC1/sapi/fpm/Makefile.frag	2011-10-08 23:04:10.000000000 +0200
++++ php-5.3.9RC1.oden/sapi/fpm/Makefile.frag	2011-11-06 13:58:35.364677132 +0100
+@@ -4,7 +4,7 @@
+ 	@mkdir -p $(builddir)/fpm
+ 	@mkdir -p $(builddir)/fpm/events
+ 
+-$(SAPI_FPM_PATH): $(builddir)/fpm $(PHP_GLOBAL_OBJS) $(PHP_SAPI_OBJS) $(SAPI_EXTRA_DEPS)
++$(SAPI_FPM_PATH): $(builddir)/fpm libphp$(PHP_MAJOR_VERSION)_common.la $(PHP_SAPI_OBJS) $(SAPI_EXTRA_DEPS)
+ 	$(BUILD_FPM)
+ 
+ $(builddir)/fpm/fpm_conf.lo: $(builddir)/../../main/build-defs.h
