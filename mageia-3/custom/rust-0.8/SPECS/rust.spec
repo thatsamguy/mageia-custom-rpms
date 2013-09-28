@@ -46,7 +46,7 @@ the rust programming language.
 %setup -q
 
 %build
-# enable for better rust debug messages during build
+# enable better rust debug messages during build
 export RUST_LOG=rustc=1;
 
 # Unable to use %configure or %configure2_5 as rust's configure is missing
