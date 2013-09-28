@@ -1,11 +1,7 @@
-%define name rust
-%define version 0.8
-%define release %mkrel 0.1
-
 Summary:	A safe, concurrent, practical programming language
-Name:		%{name}
-Version:	%{version}
-Release:	%{release}
+Name:		rust
+Version:	0.8
+Release:	%mkrel 0.1
 Source0:	http://static.rust-lang.org/dist/%{name}-%{version}.tar.gz
 License:	MIT
 Group:		Development/Other
