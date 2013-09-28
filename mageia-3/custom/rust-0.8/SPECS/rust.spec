@@ -12,7 +12,6 @@ Group:		Development
 Url:		http://www.rust-lang.org/
 
 BuildRequires:  python < 3.0
-BuildRequires:  perl >= 5.0
 
 %description
 Rust is a curly-brace, block-structured expression language. It
@@ -37,7 +36,7 @@ the rust programming language.
 
 %package -n kate-rust
 Group:          Editors
-Summary:        Syntax highlighting for rust in emacs
+Summary:        Syntax highlighting for rust in kate
 
 %description -n kate-rust
 The kate-rust package provides filetype detection and syntax highlighting for
