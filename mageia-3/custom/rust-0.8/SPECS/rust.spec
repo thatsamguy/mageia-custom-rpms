@@ -8,7 +8,7 @@ Version:	%{version}
 Release:	%{release}
 Source0:	http://static.rust-lang.org/dist/%{name}-%{version}.tar.gz
 License:	MIT
-Group:		Development
+Group:		Development/Other
 Url:		http://www.rust-lang.org/
 
 BuildRequires:  python < 3.0
