@@ -10,7 +10,7 @@
 Summary:	Robust, small and high performance http and reverse proxy server
 Name:		nginx
 Version:	1.4.2
-Release:	%mkrel 0.1
+Release:	%mkrel 0.2
 Group:		System/Servers
 # BSD License (two clause)
 # http://www.freebsd.org/copyright/freebsd-license.html
@@ -18,6 +18,7 @@ License:	BSD
 URL:		http://nginx.net/
 Source0:	http://nginx.org/download/nginx-%{version}.tar.gz
 Source1:	http://nginx.org/download/nginx-%{version}.tar.gz.asc
+Source2:	%{name}-tmpfiles.conf
 Source3:	%{name}.logrotate
 Source4:	%{name}.sysconfig
 Source5:	%{name}.service
@@ -106,6 +107,8 @@ rm -rf %{buildroot}
 
 %makeinstall_std INSTALLDIRS=vendor
 
+%{__install} -D -p -m 0644 %{SOURCE2} %{buildroot}%{_tmpfilesdir}/%{name}.conf
+
 %{__install} -d -m 755 %{buildroot}%{_sysconfdir}/logrotate.d
 %{__install} -m 644 %{SOURCE3} %{buildroot}%{_sysconfdir}/logrotate.d/%{name}
 
@@ -146,6 +149,7 @@ install -m0644 man/*.8 %{buildroot}%{_mandir}/man8/
 %_pre_useradd %{nginx_user} %{nginx_home} /bin/false
 
 %post
+%_tmpfilescreate %{name}
 %_post_service %{nginx_user}
 
 %preun
@@ -161,6 +165,7 @@ install -m0644 man/*.8 %{buildroot}%{_mandir}/man8/
 %{_mandir}/man3/%{name}.3pm*
 %{_mandir}/man8/*
 %{_unitdir}/%{name}.service
+%{_tmpfilesdir}/%{name}.conf
 %dir %{nginx_confdir}
 %dir %{nginx_confdir}/conf.d
 %config(noreplace) %{nginx_confdir}/conf.d/*.conf
