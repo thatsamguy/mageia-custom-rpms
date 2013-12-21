@@ -1,0 +1,11 @@
+--- apc.php	2012-09-03 18:52:51.000000000 +0200
++++ apc.php.oden	2013-01-10 15:54:33.066479179 +0100
+@@ -25,7 +25,7 @@
+ $VERSION='$Id: apc.php 325483 2012-05-01 00:34:04Z rasmus $';
+ 
+ ////////// READ OPTIONAL CONFIGURATION FILE ////////////
+-if (file_exists("apc.conf.php")) include("apc.conf.php");
++if (file_exists("/etc/php-apc/config.php")) include("/etc/php-apc/config.php");
+ ////////////////////////////////////////////////////////
+ 
+ ////////// BEGIN OF DEFAULT CONFIG AREA ///////////////////////////////////////////////////////////
