@@ -7,14 +7,29 @@
 Summary:	Streamable kanji code filter and converter
 Name:		libmbfl
 Version:	1.2.0
-Release:	%mkrel 3
+Release:	%mkrel 7
 License:	LGPL
 Group:		System/Libraries
 URL:		http://sourceforge.jp/projects/php-i18n/
 Source0:	http://osdn.dl.sourceforge.jp/php-i18n/18570/%{name}-%{fver}.tar.gz
-# ftp://ftp.unicode.org/Public/MAPPINGS/
-Source1:	unicode_mappings.tar.gz
+Source100:	ftp://ftp.unicode.org/Public/UNIDATA/EastAsianWidth.txt
+Source101:	ftp://ftp.unicode.org/Public/MAPPINGS/ISO8859/8859-1.TXT
+Source102:	ftp://ftp.unicode.org/Public/MAPPINGS/ISO8859/8859-2.TXT
+Source103:	ftp://ftp.unicode.org/Public/MAPPINGS/ISO8859/8859-3.TXT
+Source104:	ftp://ftp.unicode.org/Public/MAPPINGS/ISO8859/8859-4.TXT
+Source105:	ftp://ftp.unicode.org/Public/MAPPINGS/ISO8859/8859-5.TXT
+Source106:	ftp://ftp.unicode.org/Public/MAPPINGS/ISO8859/8859-6.TXT
+Source107:	ftp://ftp.unicode.org/Public/MAPPINGS/ISO8859/8859-7.TXT
+Source108:	ftp://ftp.unicode.org/Public/MAPPINGS/ISO8859/8859-8.TXT
+Source109:	ftp://ftp.unicode.org/Public/MAPPINGS/ISO8859/8859-9.TXT
+Source110:	ftp://ftp.unicode.org/Public/MAPPINGS/ISO8859/8859-10.TXT
+Source111:	ftp://ftp.unicode.org/Public/MAPPINGS/ISO8859/8859-11.TXT
+Source113:	ftp://ftp.unicode.org/Public/MAPPINGS/ISO8859/8859-13.TXT
+Source114:	ftp://ftp.unicode.org/Public/MAPPINGS/ISO8859/8859-14.TXT
+Source115:	ftp://ftp.unicode.org/Public/MAPPINGS/ISO8859/8859-15.TXT
+Source116:	ftp://ftp.unicode.org/Public/MAPPINGS/ISO8859/8859-16.TXT
 Patch0:		libmbfl-1.2.0-php-5.4.10.diff
+Patch1:		automake.patch
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	libtool
@@ -48,9 +63,14 @@ This package is only needed if you plan to develop or compile applications
 which requires the mbfl library.
 
 %prep
-
-%setup -q -n %{name}-%{fver} -a1
+%setup -q -n %{name}-%{fver}
 %patch0 -p1
+%patch1 -p1 -b .automake
+cp %{SOURCE100} mbfl/
+cp %{SOURCE101} %{SOURCE102} %{SOURCE103} %{SOURCE104} %{SOURCE105} \
+   %{SOURCE106} %{SOURCE107} %{SOURCE108} %{SOURCE109} %{SOURCE110} \
+   %{SOURCE111} %{SOURCE113} %{SOURCE114} %{SOURCE115} %{SOURCE116} \
+   filters
 
 # fix strange perms
 find . -type d -perm 0700 -exec chmod 755 {} \;
@@ -60,32 +80,19 @@ find . -type f -perm 0444 -exec chmod 644 {} \;
 chmod 644 AUTHORS DISCLAIMER LICENSE README
 
 %build
-rm -f configure
 touch NEWS ChangeLog COPYING
-libtoolize --copy --force; aclocal; autoheader; automake --add-missing --force-missing; autoconf
-
-%configure2_5x
-
+autoreconf -fi
+%configure2_5x --disable-static
 %make
 
-#%%check
-#make check
-
 %install
-rm -rf %{buildroot}
-
 %makeinstall_std
-
-%clean
-rm -rf %{buildroot}
+rm -f %{buildroot}%{_libdir}/*.la
 
 %files -n %{libname}
 %doc AUTHORS DISCLAIMER LICENSE README
-%attr(0755,root,root) %{_libdir}/*.so.%{major}*
+%{_libdir}/*.so.%{major}*
 
 %files -n %{develname}
-%attr(0755,root,root) %dir %{_includedir}/mbfl
-%attr(0644,root,root) %{_includedir}/mbfl/*.h
-%attr(0644,root,root) %{_libdir}/*.so
-%attr(0644,root,root) %{_libdir}/*.a
-%attr(0644,root,root) %{_libdir}/*.la
+%{_includedir}/mbfl
+%{_libdir}/*.so

@@ -1,0 +1,12 @@
+diff -ur libmbfl-1.2.0/configure.in libmbfl-1.2.0.automake/configure.in
+--- libmbfl-1.2.0/configure.in	2010-02-28 03:59:17.000000000 -0700
++++ libmbfl-1.2.0.automake/configure.in	2013-01-10 18:45:50.000000000 -0700
+@@ -2,7 +2,7 @@
+ AC_INIT(mbfl/mbfilter.c)
+ AM_INIT_AUTOMAKE(libmbfl, 1.1.0)
+ AC_CONFIG_SRCDIR(mbfl/mbfilter.c)
+-AM_CONFIG_HEADER(config.h)
++AC_CONFIG_HEADER(config.h)
+ 
+ # SHLIB isn't a version number but the API reference
+ # Read http://www.gnu.org/software/libtool/manual/libtool.html#Updating-version-info
